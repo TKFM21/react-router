@@ -1,0 +1,22 @@
+.btn-container {
+    padding: 0;
+}
+
+.btn {
+    width: 500px;
+    margin: 5px auto;
+    padding: 5px;
+    list-style: none;
+    background-color: #fff;
+    border: black 1px solid;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    cursor: pointer;
+    background-color: #b0c4de;
+}
+
+.btn a {
+    text-decoration: none;
+}
