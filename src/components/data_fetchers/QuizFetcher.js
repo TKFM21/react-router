@@ -1,7 +1,7 @@
 const API_URL = 'https://opentdb.com/api.php?amount=3';
 
-module.exports = {
-    quizFetcher: async () => {
+class QuizFetcher {
+    static async fetch() {
         try {
             const response = await window.fetch(API_URL);
             const data = await response.json(response);
@@ -10,4 +10,6 @@ module.exports = {
             return [];
         }
     }
-};
+}
+
+export default QuizFetcher;
