@@ -8,7 +8,6 @@ class Quiz extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
             correctQuizNum: 0,
             quizStep: 0,
             quizes: [],
@@ -23,49 +22,12 @@ class Quiz extends React.Component {
 
     async quizFetch() {
         this.setState({
-            loading: true,
             correctQuizNum: 0,
             quizStep: 0,
             quizes: [],
         });
         const quizes = await QuizModel.fetchQuizAndCreateQuizes();
-        this.setState({
-            loading: false,
-            quizes,
-        });
-    }
-
-    questionRender() {
-        if (this.state.loading) {
-            return (
-                <div>Now Loading...</div>
-            );
-        }
-        if (this.state.quizStep > this.state.quizes.length - 1) {
-            return (
-                <div>
-                    <h2>Result</h2>
-                    <h3>Corrected Answer is: {this.state.correctQuizNum}/{this.state.quizes.length}</h3>
-                    <Button onClickHandler={this.quizFetch}>ReStart</Button>
-                </div>
-            );
-        }
-
-        const quiz = this.state.quizes[this.state.quizStep];
-        return (
-            <div>
-                <h2 className="question">{quiz.question}</h2>
-                <div>
-                    {quiz.shuffledAnswers().map((answer, index) => {
-                        return (
-                            <Button key={index} onClickHandler={() => this.answerCheck(answer, quiz.correctAnswer)}>
-                                {answer}
-                            </Button>
-                        );
-                    })}
-                </div>
-            </div>
-        );
+        this.setState({ quizes });
     }
 
     answerCheck(selectedAnswer, correct_answer) {
@@ -81,14 +43,58 @@ class Quiz extends React.Component {
     }
 
     render() {
+        const { quizes, quizStep } = this.state;
+        if (!quizes.length && !quizStep) {
+            // ロード画面
+            return this.loading();
+        }
+        if (quizes.length > 0 && quizStep > quizes.length - 1) {
+            // 再スタート画面
+            return this.restart();
+        }
+
+        // クイズ表示画面
+        const quiz = quizes[quizStep];
+        const answers = quiz.shuffledAnswers().map( (answer, index) => {
+            return (
+                <li key={index}>
+                    <Button onClickHandler={() => this.answerCheck(answer, quiz.correctAnswer)}>
+                        {answer}
+                    </Button>
+                </li>
+            );
+        });
         return (
-            <div className="quiz-container">
-                <h1 className="quiz-title">Quiz</h1>
-                {this.questionRender()}
-                <hr />
-                <ul className="return-top-link-container">
-                    <li className="return-top-link"><Link to="/">トップページへ</Link></li>
-                </ul>
+            <div>
+                <h1>Quiz</h1>
+                <h2>{quiz.question}</h2>
+                <ul className="answer-container">{answers}</ul>
+                <hr/>
+                <Link to="/">トップページへ</Link>
+            </div>
+        );
+    }
+
+    loading() {
+        return (
+            <div>
+                <h1>Quiz</h1>
+                <p>Now Loading...</p>
+                <hr/>
+                <Link to="/">トップページへ</Link>
+            </div>
+        );
+    }
+
+    restart() {
+        return (
+            <div>
+                <h1>Quiz</h1>
+                <h2>Result</h2>
+                <h3>Corrected Answer is: {this.state.correctQuizNum}/{this.state.quizes.length}</h3>
+                <Button onClickHandler={this.quizFetch}>ReStart</Button>
+                <hr/>
+                <Link to="/">トップページへ</Link>
             </div>
         );
     }

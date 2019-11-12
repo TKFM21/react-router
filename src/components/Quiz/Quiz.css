@@ -1,8 +1,4 @@
-.return-top-link-container {
-    padding: 0;
-}
-
-.return-top-link {
+.answer-container {
     list-style: none;
-    padding-bottom: 15px;
+    padding: 0;
 }

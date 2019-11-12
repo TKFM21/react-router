@@ -1,14 +1,10 @@
-const API_URL = 'https://opentdb.com/api.php?amount=3';
+import axios from 'axios';
+const API_URL = 'https://opentdb.com/api.php?amount=10';
 
 class QuizFetcher {
     static async fetch() {
-        try {
-            const response = await window.fetch(API_URL);
-            const data = await response.json(response);
-            return data.results;
-        } catch(error) {
-            return [];
-        }
+        const response = await axios.get(API_URL);
+        return response.data.results;
     }
 }
 

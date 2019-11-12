@@ -7,7 +7,7 @@ function Home() {
     return (
         <div className="home">
             <h1>トップページ</h1>
-            <Button><Link to="/quiz/">Quiz Start</Link></Button>
+            <Link to="/quiz/"><Button>Quiz Start</Button></Link>
         </div>
     );
 }
